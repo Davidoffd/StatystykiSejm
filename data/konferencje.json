@@ -1,1 +1,30 @@
-
+[
+    {
+        "partia": "PiS",
+        "konferencje": 0
+    },
+    {
+        "partia": "KO",
+        "konferencje": 0
+    },
+    {
+        "partia": "Konfederacja",
+        "konferencje": 0
+    },
+    {
+        "partia": "Polska 2050",
+        "konferencje": 0
+    },
+    {
+        "partia": "PSL",
+        "konferencje": 0
+    },
+    {
+        "partia": "Lewica",
+        "konferencje": 0
+    },
+    {
+        "partia": "Razem",
+        "konferencje": 0
+    }
+]
