@@ -1,8 +1,26 @@
-      - name: Run script
-        run: node scripts/update.js
+name: Aktualizacja konferencji
 
-      - name: Upload HTML
-        uses: actions/upload-artifact@v4
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install
+
+      - run: npx playwright install --with-deps
+
+      - run: node scripts/update.js
+
+      - uses: actions/upload-artifact@v4
         with:
           name: page
           path: |
