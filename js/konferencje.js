@@ -1,25 +1,33 @@
-const dane = [
-    { partia: "PiS", konferencje: 0 },
-    { partia: "KO", konferencje: 0 },
-    { partia: "Konfederacja", konferencje: 0 },
-    { partia: "Polska 2050", konferencje: 0 },
-    { partia: "PSL", konferencje: 0 },
-    { partia: "Lewica", konferencje: 0 },
-    { partia: "Razem", konferencje: 0 }
-];
+fetch("data/konferencje.json")
+    .then(response => response.json())
+    .then(dane => {
 
-const tabela = document.getElementById("ranking");
+        const tabela = document.getElementById("ranking");
 
-tabela.innerHTML = "";
+        tabela.innerHTML = "";
 
-dane.forEach((partia, index) => {
+        dane.sort((a, b) => b.konferencje - a.konferencje);
 
-    tabela.innerHTML += `
-        <tr>
-            <td>${index + 1}</td>
-            <td>${partia.partia}</td>
-            <td>${partia.konferencje}</td>
-        </tr>
-    `;
+        dane.forEach((partia, index) => {
 
-});
+            tabela.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${partia.partia}</td>
+                    <td><strong>${partia.konferencje}</strong></td>
+                </tr>
+            `;
+
+        });
+
+    })
+    .catch(() => {
+
+        document.getElementById("ranking").innerHTML =
+        `<tr>
+            <td colspan="3">
+                Błąd wczytywania danych.
+            </td>
+        </tr>`;
+
+    });
