@@ -1,1 +1,12 @@
-
+{
+  "name": "statystykisejm",
+  "version": "1.0.0",
+  "description": "Automatyczne zliczanie konferencji iTV Sejm",
+  "main": "scripts/update.js",
+  "scripts": {
+    "update": "node scripts/update.js"
+  },
+  "dependencies": {
+    "playwright": "^1.54.1"
+  }
+}
