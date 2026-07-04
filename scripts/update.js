@@ -1,35 +1,74 @@
-const { chromium } = require("playwright");
 const fs = require("fs");
 
-(async () => {
+async function main() {
 
-    const browser = await chromium.launch({
-        headless: true
-    });
+    // adres API - pierwsze 100 rekordów
+    const url = "https://api.sejm.gov.pl/sejm/term10/videos?limit=100";
 
-    const page = await browser.newPage();
+    console.log("Pobieram:", url);
 
-    await page.goto(
-        "https://www.sejm.gov.pl/sejm10.nsf/transmisje_arch.xsp",
-        {
-            waitUntil: "domcontentloaded",
-            timeout: 60000
-        }
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error("Błąd API: " + response.status);
+    }
+
+    const videos = await response.json();
+
+    const ranking = {
+        "PiS": 0,
+        "KO": 0,
+        "Konfederacja": 0,
+        "Polska 2050": 0,
+        "PSL": 0,
+        "Lewica": 0,
+        "Razem": 0
+    };
+
+    for (const v of videos) {
+
+        if (v.type !== "konferencja")
+            continue;
+
+        const txt = (
+            (v.title || "") +
+            " " +
+            (v.description || "")
+        ).toLowerCase();
+
+        if (txt.includes("pis"))
+            ranking["PiS"]++;
+
+        else if (txt.includes("ko"))
+            ranking["KO"]++;
+
+        else if (txt.includes("psl"))
+            ranking["PSL"]++;
+
+        else if (txt.includes("2050"))
+            ranking["Polska 2050"]++;
+
+        else if (txt.includes("lewica"))
+            ranking["Lewica"]++;
+
+        else if (txt.includes("razem"))
+            ranking["Razem"]++;
+
+        else if (txt.includes("konfeder"))
+            ranking["Konfederacja"]++;
+    }
+
+    const wynik = Object.entries(ranking).map(([partia, konferencje]) => ({
+        partia,
+        konferencje
+    }));
+
+    fs.writeFileSync(
+        "data/konferencje.json",
+        JSON.stringify(wynik, null, 4)
     );
 
-    console.log("Tytuł:", await page.title());
+    console.log(wynik);
+}
 
-    await page.screenshot({
-        path: "screenshot.png",
-        fullPage: true
-    });
-
-    const html = await page.content();
-
-    fs.writeFileSync("page.html", html);
-
-    console.log("HTML zapisany.");
-
-    await browser.close();
-
-})();
+main().catch(console.error);
