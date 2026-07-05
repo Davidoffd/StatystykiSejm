@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 async function main() {
 
     const url = "https://api.sejm.gov.pl/sejm/term10/videos?limit=100";
@@ -14,33 +12,15 @@ async function main() {
 
     const videos = await response.json();
 
-    const typy = {};
+    console.log("\n=== KONFERENCJE ===\n");
 
     for (const v of videos) {
 
-        const type = v.type || "(brak)";
+        if (v.type === "konferencja") {
 
-        if (!typy[type]) {
-            typy[type] = 0;
+            console.log(v.title);
+
         }
-
-        typy[type]++;
-
-    }
-
-    console.log("\n=== TYPY ===\n");
-
-    console.table(typy);
-
-    console.log("\n=== PRZYKŁADY ===\n");
-
-    for (const t of Object.keys(typy)) {
-
-        const film = videos.find(v => v.type === t);
-
-        console.log("TYPE:", t);
-        console.log("TITLE:", film.title);
-        console.log("---------------------------");
 
     }
 
