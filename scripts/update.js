@@ -1,3 +1,4 @@
+console.log("NOWA WERSJA SKRYPTU 123456");
 const fs = require("fs");
 
 async function main() {
