@@ -15,6 +15,8 @@ async function main() {
     }
 
     const videos = await response.json();
+    console.log(JSON.stringify(videos[0], null, 2));
+return;
 
     const ranking = {
         "PiS": 0,
